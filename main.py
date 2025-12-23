@@ -15,15 +15,16 @@ os.environ["SSL_CERT_FILE"] = certifi.where()
 
 # Create the client
 client: TikTokLiveClient = TikTokLiveClient(
-    unique_id="@tchiko_24",
+    unique_id="@rahinas6",
     )
 
 client._web.httpx_client.headers.update({
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
 })
 
-def my_callback(text, segment):
+def my_callback(text, segment, unique_id):
     print(f"Segment {segment}: {text}")
+    print(f"unique_id {unique_id}")
     # Envoyer vers une API, DB, etc.
 
 # Listen to an event with a decorator!
@@ -34,6 +35,7 @@ async def on_connect(event: ConnectEvent):
     transcriber = TikTokLiveTranscriber(
         room_id=f"{client.room_id}",
         model="small",
+        unique_id=event.unique_id,
         on_transcription=my_callback,
         on_error=lambda e: print(f"Erreur: {e}"),
         on_complete=lambda s: print(f"Stats: {s}")

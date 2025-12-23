@@ -101,7 +101,8 @@ class TikTokLiveTranscriber:
         language: str = LANGUAGE,
         duration: int = DURATION,
         ffmpeg_timeout: int = FFMPEG_TIMEOUT,
-        on_transcription: Optional[Callable[[str, int], None]] = None,
+        unique_id: str = "",
+        on_transcription: Optional[Callable[[str, int, str], None]] = None,
         on_error: Optional[Callable[[str], None]] = None,
         on_complete: Optional[Callable[[Dict], None]] = None
     ):
@@ -114,7 +115,7 @@ class TikTokLiveTranscriber:
             language: Code de langue (ex: 'fr', 'en')
             duration: Durée de chaque segment en secondes
             ffmpeg_timeout: Timeout FFmpeg en secondes
-            on_transcription: Callback(transcription, segment_number) appelé à chaque transcription
+            on_transcription: Callback(transcription, segment_number, unique_id) appelé à chaque transcription
             on_error: Callback(error_message) appelé en cas d'erreur
             on_complete: Callback(stats_dict) appelé à la fin
         """
@@ -123,6 +124,8 @@ class TikTokLiveTranscriber:
         self.language = language
         self.duration = duration
         self.ffmpeg_timeout = ffmpeg_timeout
+
+        self.unique_id = unique_id
         
         self.on_transcription = on_transcription
         self.on_error = on_error
@@ -230,7 +233,7 @@ class TikTokLiveTranscriber:
                 
                 if self.on_transcription:
                     try:
-                        self.on_transcription(transcription, segment_number)
+                        self.on_transcription(transcription, segment_number, self.unique_id)
                     except Exception as e:
                         logger.error(f"Erreur dans le callback on_transcription: {e}")
                         if self.on_error:
@@ -474,7 +477,8 @@ def live_transcriber(
     room_id: str,
     model: str = MODEL_NAME,
     language: str = LANGUAGE,
-    on_transcription: Optional[Callable[[str, int], None]] = None,
+    unique_id: str = "",
+    on_transcription: Optional[Callable[[str, int, str], None]] = None,
     on_error: Optional[Callable[[str], None]] = None,
     on_complete: Optional[Callable[[Dict], None]] = None
 ) -> TikTokLiveTranscriber:
@@ -499,6 +503,7 @@ def live_transcriber(
         room_id=room_id,
         model=model,
         language=language,
+        unique_id=unique_id,
         on_transcription=on_transcription,
         on_error=on_error,
         on_complete=on_complete
