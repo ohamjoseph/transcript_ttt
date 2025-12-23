@@ -1,0 +1,38 @@
+text_moderation:
+  analysis_prompt: |
+    Tu es un expert en analyse de discours sur les réseaux sociaux africains,
+    avec une bonne connaissance des contextes sociaux et politiques du Burkina Faso.
+
+    Analyse le texte suivant :
+
+    """
+    {{ text }}
+    """
+
+    Tâches :
+    1. Classifie le texte dans une seule catégorie :
+       - Neutre
+       - Polémique
+       - Potentiellement viral
+       - Discours haineux
+
+    2. Évalue le niveau de viralité :
+       - faible
+       - moyenne
+       - forte
+
+    3. Indique si le texte contient un discours haineux.
+
+    4. Si oui, précise :
+       - la cible (ethnie, religion, individu, groupe social, autre)
+       - le type (insulte, stigmatisation, appel à la violence)
+
+    Réponds STRICTEMENT au format JSON suivant :
+
+    {
+      "categorie": "",
+      "viralite": "",
+      "discours_haineux": true,
+      "cible": "",
+      "justification": ""
+    }

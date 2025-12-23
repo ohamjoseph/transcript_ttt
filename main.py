@@ -3,6 +3,8 @@ import certifi
 import os
 from TikTokLive import TikTokLiveClient
 from TikTokLive.events import ConnectEvent, CommentEvent
+
+from analyse.analyzer import analyze_text
 from transcript.transcript import TikTokLiveTranscriber
 
 
@@ -15,7 +17,7 @@ os.environ["SSL_CERT_FILE"] = certifi.where()
 
 # Create the client
 client: TikTokLiveClient = TikTokLiveClient(
-    unique_id="@rahinas6",
+    unique_id="@.sadia.diallo",
     )
 
 client._web.httpx_client.headers.update({
@@ -25,6 +27,7 @@ client._web.httpx_client.headers.update({
 def my_callback(text, segment, unique_id):
     print(f"Segment {segment}: {text}")
     print(f"unique_id {unique_id}")
+    print(analyze_text(text))
     # Envoyer vers une API, DB, etc.
 
 # Listen to an event with a decorator!
